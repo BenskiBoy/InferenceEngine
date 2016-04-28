@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace InferenceEngine
 {
@@ -11,6 +12,14 @@ namespace InferenceEngine
 
 		public HornClauseFactClass ()
 		{
+		}
+
+		// Method to return the symbol contained within the Fact Clause
+		public override List<String> GetSymbols()
+		{
+			List<String> Symbols = new List<string> ();
+			Symbols.Add (Symbol);
+			return Symbols;
 		}
 	}
 }

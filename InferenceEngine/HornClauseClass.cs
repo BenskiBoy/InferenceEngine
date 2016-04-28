@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace InferenceEngine
 {	
@@ -8,6 +9,13 @@ namespace InferenceEngine
 	{
 		public HornClauseClass ()
 		{
+		}
+
+		virtual public List<String> GetSymbols(){
+			// Inherited
+			List<String> Symbols = new List<string> ();
+			Symbols.Add ("This shouldn't be run");
+			return Symbols;
 		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace InferenceEngine
 {	
@@ -15,6 +16,39 @@ namespace InferenceEngine
 
 		public HornClauseAndClass ()
 		{
+		}
+
+		// Method to return the symbols contained within the "And" Clause
+		public override List<String> GetSymbols()
+		{
+			List<String> AllSymbols = new List<string> ();
+
+			List<String> Premise1Symbols = Premise1.GetSymbols ();
+			List<String> Premise2Symbols = Premise2.GetSymbols ();
+			List<String> ConclusionSymbols = Conclusion.GetSymbols ();
+
+			foreach (String Symbol in Premise1Symbols) {
+				if (!AllSymbols.Contains (Symbol)) {
+					// only add symbols that aren't already contained
+					AllSymbols.Add (Symbol);
+				}
+			}
+
+			foreach (String Symbol in Premise2Symbols) {
+				if (!AllSymbols.Contains (Symbol)) {
+					// only add symbols that aren't already contained
+					AllSymbols.Add (Symbol);
+				}
+			}
+
+			foreach (String Symbol in ConclusionSymbols) {
+				if (!AllSymbols.Contains (Symbol)) {
+					// only add symbols that aren't already contained
+					AllSymbols.Add (Symbol);
+				}
+			}
+
+			return AllSymbols;
 		}
 	}
 }

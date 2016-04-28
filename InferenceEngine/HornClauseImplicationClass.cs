@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+
 
 namespace InferenceEngine
 {	
@@ -14,6 +16,31 @@ namespace InferenceEngine
 
 		public HornClauseImplicationClass ()
 		{
+		}
+
+		// Method to return the symbols contained within the Implication Clause
+		public override List<String> GetSymbols()
+		{
+			List<String> AllSymbols = new List<string> ();
+
+			List<String> PremiseSymbols = Premise.GetSymbols ();
+			List<String> ConclusionSymbols = Conclusion.GetSymbols ();
+
+			foreach (String Symbol in PremiseSymbols) {
+				if (!AllSymbols.Contains (Symbol)) {
+					// only add symbols that aren't already contained
+					AllSymbols.Add (Symbol);
+				}
+			}
+
+			foreach (String Symbol in ConclusionSymbols) {
+				if (!AllSymbols.Contains (Symbol)) {
+					// only add symbols that aren't already contained
+					AllSymbols.Add (Symbol);
+				}
+			}
+
+			return AllSymbols;
 		}
 	}
 }
