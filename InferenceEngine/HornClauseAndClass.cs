@@ -50,6 +50,50 @@ namespace InferenceEngine
 
 			return AllSymbols;
 		}
+
+        // Method to return the premise symbols contained within the "And" Clause
+        public List<String> GetPremiseSymbols()
+        {
+            List<String> AllSymbols = new List<string>();
+            List<String> Premise1Symbols = Premise1.GetSymbols();
+            List<String> Premise2Symbols = Premise2.GetSymbols();
+
+            foreach (String Symbol in Premise1Symbols)
+            {
+                if (!AllSymbols.Contains(Symbol))
+                {
+                    // only add symbols that aren't already contained
+                    AllSymbols.Add(Symbol);
+                }
+            }
+
+            foreach (String Symbol in Premise2Symbols)
+            {
+                if (!AllSymbols.Contains(Symbol))
+                {
+                    // only add symbols that aren't already contained
+                    AllSymbols.Add(Symbol);
+                }
+            }
+            return AllSymbols;
+        }
+
+        // Method to return the Conclusion symbols contained within the "And" Clause
+        public List<String> GetConclusionSymbols()
+        {
+            List<String> AllSymbols = new List<string>();
+            List<String> ConclusionSymbols = Conclusion.GetSymbols();
+
+            foreach (String Symbol in ConclusionSymbols)
+            {
+                if (!AllSymbols.Contains(Symbol))
+                {
+                    // only add symbols that aren't already contained
+                    AllSymbols.Add(Symbol);
+                }
+            }
+            return AllSymbols;
+        }
 	}
 }
 
