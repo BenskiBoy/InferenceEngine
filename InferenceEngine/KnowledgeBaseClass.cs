@@ -10,6 +10,7 @@ namespace InferenceEngine
 		// Attributes
 		public List <HornClauseClass> Clauses = new List<HornClauseClass>();	// list of clauses contained within the KB
 		public List <String> Symbols = new List<String>(); // List of symbols contained within the KB
+		// public ? TruthTable = new TruthTable();	// TruthTable 
 
 		// Methods
 		public KnowledgeBaseClass ()
@@ -72,6 +73,8 @@ namespace InferenceEngine
 				Console.WriteLine ("Repeated Symbol found in query: " + Query.PropositionSymbol);
 			}
 
+			// Save symbols to KB
+			this.Symbols = AllSymbols;
 
 			// Second: from notes: return TT_CheckAll(KB,α,symbols,{})
 			// Result = TT_CheckAll(Query, AllSymbols, EmptyModel)
@@ -90,6 +93,8 @@ namespace InferenceEngine
 
 			return Result;
 		}
+
+
 	}
 }
 
