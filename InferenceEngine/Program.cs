@@ -25,16 +25,16 @@ namespace InferenceEngine
 
 			QueryClass MyQuery = new QueryClass ();
 			MyQuery.InferenceType = InferenceType.TT;
-			MyQuery.PropositionSymbol = "A1";
+			MyQuery.PropositionSymbol = "A";
 
 
 			string Result = MyKB.MakeQuery (MyQuery);
 
-			TruthTableClass MyTT = new TruthTableClass (MyKB);
-			MyTT.ComputeTruthTableWorlds ();
-			// TODO Program logic for evaluating the clause columns in the TT
+			
 
-			MyTT.PrintTT ();
+            
+
+            int i = 1;
 
 		}
 	}

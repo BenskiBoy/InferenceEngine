@@ -21,6 +21,25 @@ namespace InferenceEngine
 			Symbols.Add (Symbol);
 			return Symbols;
 		}
-	}
+
+        public override bool Evaluate(List<SymbolValue> SymbolValues)
+        {
+            foreach(SymbolValue Symbol in SymbolValues)
+            {
+                if(Symbol.SymbolName == this.Symbol)
+                {
+                    if (Symbol.Value == true)
+                    {
+                        return true;
+                    }
+                    else
+                        //If symbol but value is false
+                        return false;
+                }
+            }
+            //If symbol not found
+            return false;
+        }
+    }
 }
 

@@ -18,6 +18,12 @@ namespace InferenceEngine
 			Symbols.Add ("This shouldn't be run");
 			return Symbols;
 		}
+
+        virtual public bool Evaluate(List<SymbolValue> SymbolValues)
+        {
+            //This should never run
+            return false;
+        }
 	}
 }
 

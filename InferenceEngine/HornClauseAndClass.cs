@@ -2,54 +2,49 @@
 using System.Collections.Generic;
 
 namespace InferenceEngine
-{	
-	// Class to model the behaviour of an AND clause
-	// E.g. A & B => C
-	// E.g. Premise1 & Premise2 => Conclusion
-	public class HornClauseAndClass : HornClauseClass
-	{	
-		// Atributes
-		// In Horn form, the premise is called the body and the conclusion is called the head.
-		public HornClauseClass Premise1;	// Phrases can consist of other phrases
-		public HornClauseClass Premise2;	
-		public HornClauseClass Conclusion;
+{
+    // Class to model the behaviour of an AND clause
+    // E.g. A & B => C
+    // E.g. Premise1 & Premise2 => Conclusion
+    public class HornClauseAndClass : HornClauseClass
+    {
+        // Atributes
+        // In Horn form, the premise is called the body and the conclusion is called the head.
+        public HornClauseClass Premise1;    // Phrases can consist of other phrases
+        public HornClauseClass Premise2;
 
-		public HornClauseAndClass ()
-		{
-		}
+        public HornClauseAndClass()
+        {
+        }
 
-		// Method to return the symbols contained within the "And" Clause
-		public override List<String> GetSymbols()
-		{
-			List<String> AllSymbols = new List<string> ();
+        // Method to return the symbols contained within the "And" Clause
+        public override List<String> GetSymbols()
+        {
+            List<String> AllSymbols = new List<string>();
 
-			List<String> Premise1Symbols = Premise1.GetSymbols ();
-			List<String> Premise2Symbols = Premise2.GetSymbols ();
-			List<String> ConclusionSymbols = Conclusion.GetSymbols ();
+            List<String> Premise1Symbols = Premise1.GetSymbols();
+            List<String> Premise2Symbols = Premise2.GetSymbols();
 
-			foreach (String Symbol in Premise1Symbols) {
-				if (!AllSymbols.Contains (Symbol)) {
-					// only add symbols that aren't already contained
-					AllSymbols.Add (Symbol);
-				}
-			}
+            foreach (String Symbol in Premise1Symbols)
+            {
+                if (!AllSymbols.Contains(Symbol))
+                {
+                    // only add symbols that aren't already contained
+                    AllSymbols.Add(Symbol);
+                }
+            }
 
-			foreach (String Symbol in Premise2Symbols) {
-				if (!AllSymbols.Contains (Symbol)) {
-					// only add symbols that aren't already contained
-					AllSymbols.Add (Symbol);
-				}
-			}
+            foreach (String Symbol in Premise2Symbols)
+            {
+                if (!AllSymbols.Contains(Symbol))
+                {
+                    // only add symbols that aren't already contained
+                    AllSymbols.Add(Symbol);
+                }
+            }
 
-			foreach (String Symbol in ConclusionSymbols) {
-				if (!AllSymbols.Contains (Symbol)) {
-					// only add symbols that aren't already contained
-					AllSymbols.Add (Symbol);
-				}
-			}
-
-			return AllSymbols;
-		}
+            return AllSymbols;
+        }
 
         // Method to return the premise symbols contained within the "And" Clause
         public List<String> GetPremiseSymbols()
@@ -78,22 +73,33 @@ namespace InferenceEngine
             return AllSymbols;
         }
 
-        // Method to return the Conclusion symbols contained within the "And" Clause
-        public List<String> GetConclusionSymbols()
+        public override bool Evaluate(List<SymbolValue> SymbolValues)
         {
-            List<String> AllSymbols = new List<string>();
-            List<String> ConclusionSymbols = Conclusion.GetSymbols();
+            //TODO LOGIC AND SHIT
 
-            foreach (String Symbol in ConclusionSymbols)
+            /*
+            foreach (SymbolValue Symbol1 in SymbolValues)
             {
-                if (!AllSymbols.Contains(Symbol))
+                foreach (SymbolValue Symbol2 in SymbolValues)
                 {
-                    // only add symbols that aren't already contained
-                    AllSymbols.Add(Symbol);
+                    if (Symbol1.SymbolName == Premise1.GetSymbols() && Symbol2.SymbolName == Premise1)
+                    {
+                        if (Symbol.Value == true)
+                        {
+                            return true;
+                        }
+                        else
+                            //If symbol but value is false
+                            return false;
+                    }
                 }
             }
-            return AllSymbols;
+            
+            //If symbol not found
+            return false;
+            */
+            return false;
         }
-	}
+    }
 }
 
