@@ -6,12 +6,14 @@ namespace InferenceEngine
 	public class QueryClass
 	{
 		// Attributes
-		public String PropositionSymbol;	// String to represent the propositional symbol being asked of the KB
 		public InferenceType InferenceType; // The Type of Inference to be used by the KB in response to the query 
+		public HornClauseClass QueryClause;	// Clause to represent the query being asked of the KB
 
 		// Methods
-		public QueryClass ()
+		public QueryClass (HornClauseClass Clause, InferenceType InferenceType)
 		{
+			this.QueryClause = Clause;
+			this.InferenceType = InferenceType;
 		}
 	}
 }

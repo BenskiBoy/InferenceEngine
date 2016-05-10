@@ -14,8 +14,10 @@ namespace InferenceEngine
 		public HornClauseClass Premise;	// Phrases can consist of other phrases
 		public HornClauseClass Conclusion;
 
-		public HornClauseImplicationClass ()
+		public HornClauseImplicationClass (HornClauseClass Premise, HornClauseClass Conclusion)
 		{
+			this.Premise = Premise;
+			this.Conclusion = Conclusion;
 		}
 
 		// Method to return the symbols contained within the Implication Clause
@@ -41,6 +43,14 @@ namespace InferenceEngine
 			}
 
 			return AllSymbols;
+		}
+
+		// Method to evaluate the clause for the truth table row represented by the
+		// SymbolValues list
+		public override bool Evaluate(List<SymbolValue> SymbolValues)
+		{
+			// evaluate using A=>B  <=>  ~A || B
+			return (!this.Premise.Evaluate (SymbolValues) || this.Conclusion.Evaluate (SymbolValues));
 		}
 	}
 }

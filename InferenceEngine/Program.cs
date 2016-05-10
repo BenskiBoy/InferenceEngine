@@ -11,26 +11,27 @@ namespace InferenceEngine
 
 			KnowledgeBaseClass MyKB = new KnowledgeBaseClass ();
 
-			HornClauseFactClass Fact1 = new HornClauseFactClass ();
-			Fact1.Symbol = "A";
-			MyKB.Clauses.Add (Fact1);
+			HornClauseFactClass Fact1 = new HornClauseFactClass ("A");
+			//MyKB.Clauses.Add (Fact1);
 
-			HornClauseFactClass Fact2 = new HornClauseFactClass ();
-			Fact2.Symbol = "B";
-			MyKB.Clauses.Add (Fact2);
+			HornClauseFactClass Fact2 = new HornClauseFactClass ("B");
+			//MyKB.Clauses.Add (Fact2);
 
-			HornClauseFactClass Fact3 = new HornClauseFactClass ();
-			Fact3.Symbol = "A";
+			HornClauseFactClass Fact3 = new HornClauseFactClass ("C");
 			MyKB.Clauses.Add (Fact3);
 
-			QueryClass MyQuery = new QueryClass ();
-			MyQuery.InferenceType = InferenceType.TT;
-			MyQuery.PropositionSymbol = "A";
+			HornClauseAndClass AndClause1 = new HornClauseAndClass (Fact1,Fact2);
+			//MyKB.Clauses.Add (AndClause1);
 
+			HornClauseImplicationClass ImplicationClause1 = new HornClauseImplicationClass (Fact1,Fact2);
+			MyKB.Clauses.Add (ImplicationClause1);
+
+			QueryClass MyQuery = new QueryClass (Fact1,InferenceType.TT);
+			//QueryClass MyQuery = new QueryClass (Fact2,InferenceType.TT);
 
 			string Result = MyKB.MakeQuery (MyQuery);
 
-			
+			Console.WriteLine (Result);
 
             
 

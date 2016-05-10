@@ -10,8 +10,9 @@ namespace InferenceEngine
 		// Attributes
 		public String Symbol;	// The symbol that is indicated as true by the Fact Horn Clause
 
-		public HornClauseFactClass ()
+		public HornClauseFactClass (String Symbol)
 		{
+			this.Symbol = Symbol;
 		}
 
 		// Method to return the symbol contained within the Fact Clause
@@ -22,22 +23,24 @@ namespace InferenceEngine
 			return Symbols;
 		}
 
+		// method that takes a list of symbols and their values,
+		// and returns true if the symbol contained within it
+		// is in the list and is true. Else returns false.
         public override bool Evaluate(List<SymbolValue> SymbolValues)
-        {
+        {	
             foreach(SymbolValue Symbol in SymbolValues)
             {
                 if(Symbol.SymbolName == this.Symbol)
                 {
-                    if (Symbol.Value == true)
-                    {
-                        return true;
-                    }
-                    else
-                        //If symbol but value is false
-                        return false;
+					if (Symbol.Value == true) {
+						return true;
+					} else {
+						//If symbol but value is false
+						return false;
+					}
                 }
             }
-            //If symbol not found
+            //If symbol not found in the list
             return false;
         }
     }

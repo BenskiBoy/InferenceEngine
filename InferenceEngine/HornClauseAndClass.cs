@@ -13,8 +13,10 @@ namespace InferenceEngine
         public HornClauseClass Premise1;    // Phrases can consist of other phrases
         public HornClauseClass Premise2;
 
-        public HornClauseAndClass()
+		public HornClauseAndClass(HornClauseClass Premise1, HornClauseClass Premise2)
         {
+			this.Premise1 = Premise1;
+			this.Premise2 = Premise2;
         }
 
         // Method to return the symbols contained within the "And" Clause
@@ -77,28 +79,30 @@ namespace InferenceEngine
         {
             //TODO LOGIC AND SHIT
 
+			return (this.Premise1.Evaluate (SymbolValues) && this.Premise2.Evaluate (SymbolValues));
+
             /*
             foreach (SymbolValue Symbol1 in SymbolValues)
             {
                 foreach (SymbolValue Symbol2 in SymbolValues)
                 {
-                    if (Symbol1.SymbolName == Premise1.GetSymbols() && Symbol2.SymbolName == Premise1)
+					// the below line only works if the premise consists of only one symbol (ie. it's a fact clause)
+					// TODO allow for nested clauses
+					if (Symbol1.SymbolName == Premise1.GetSymbols()[0] && Symbol2.SymbolName == Premise2.GetSymbols()[0])
                     {
-                        if (Symbol.Value == true)
-                        {
-                            return true;
-                        }
-                        else
-                            //If symbol but value is false
-                            return false;
+						if (Symbol1.Value == true && Symbol1.Value == true) {
+							return true;
+						} else {
+							//If symbol but value is false
+							return false;
+						}
                     }
                 }
             }
-            
             //If symbol not found
             return false;
             */
-            return false;
+
         }
     }
 }
