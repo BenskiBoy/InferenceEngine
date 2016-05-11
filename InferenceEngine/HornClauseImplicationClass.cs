@@ -66,6 +66,12 @@ namespace InferenceEngine
 			return AllSymbols;
 		}
 
+		// Method to return the symbols contained within the Implication Clause conclusion
+		public override String GetConclusionSymbol()
+		{
+			return this.Conclusion.GetSymbols()[0];
+		}
+
 		// Method to evaluate the clause for the truth table row represented by the
 		// SymbolValues list
 		public override bool Evaluate(List<SymbolValue> SymbolValues)

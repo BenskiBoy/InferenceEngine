@@ -28,6 +28,11 @@ namespace InferenceEngine
 			return Symbols;
 		}
 
+		virtual public String GetConclusionSymbol(){
+			// Inherited
+			return "This shouldn't be run";
+		}
+
         virtual public bool Evaluate(List<SymbolValue> SymbolValues)
         {
             //This should never run

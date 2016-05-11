@@ -70,10 +70,10 @@ namespace InferenceEngine
 				// Initialised to the number of premises in the clause
 				List <int> NumPremisesRemaining = new List<int> ();
 				int TempInt = 0;
-				for (int SymbolNum = 0; SymbolNum < this.Symbols.Count; SymbolNum++) {
+				for (int ClauseNum = 0; ClauseNum < this.Clauses.Count; ClauseNum++) {
 					// TODO make the symbols hornclause classes so we can 
 					// see how many premise symbols they have
-					TempInt = 999999999;
+					TempInt = this.Clauses[ClauseNum].GetPremiseSymbols().Count;
 					NumPremisesRemaining.Add (TempInt);
 				}
 
@@ -96,7 +96,70 @@ namespace InferenceEngine
 					}
 				}
 
+				String P;
+				List<String> CPremiseSymbols = new List <String> ();
+				Boolean TempBool = false;
 
+				while (Agenda.Count > 0) {
+					// while agenda is not empty
+					// assign the first item of the agenda to P
+					P = Agenda[0];
+					// then remove it from the Agenda
+					Agenda.RemoveAt (0);
+
+					// return true if P = Q 
+					if (P == Query.QueryClause.GetPremiseSymbols()[0]) {
+						Result = "YES";
+					}
+
+
+					int SymbolIndex = 0;
+					// find the corresponding index for the symbol P
+					for (int SymbolNum = 0; SymbolNum < this.Symbols.Count; SymbolNum ++){
+						if (this.Symbols[SymbolNum] == P) {
+							SymbolIndex = SymbolNum;
+						}
+					}
+
+					// if inferred[p] = false
+					// ie. if the symbol P is known to be inferred
+					if( SymbolIsInferred [SymbolIndex] == false) {
+						// set the inferred[p] to true;
+						SymbolIsInferred [SymbolIndex] = true;
+
+						for (int ClauseNum = 0; ClauseNum < this.Clauses.Count; ClauseNum++){
+							// check if P is in C.premise
+							CPremiseSymbols = new List <String> ();
+							CPremiseSymbols = this.Clauses[ClauseNum].GetPremiseSymbols ();
+							TempBool = false;
+							foreach (String Symbol in CPremiseSymbols) {
+								if (Symbol == P) {
+									TempBool = true;
+								}
+							}
+							if (TempBool == true) {
+								// we've found P in this clause
+								// decrement count[ClauseNum]
+								NumPremisesRemaining[ClauseNum] = NumPremisesRemaining[ClauseNum] - 1;
+								// if count[c] = 0 then add c.CONCLUSION to agenda
+								if(NumPremisesRemaining[ClauseNum] == 0){
+									Agenda.Add(this.Clauses [ClauseNum].GetConclusionSymbol());
+								}
+							}
+
+						}
+					}
+					/*
+				  	if p = q then return true 
+				  	if inferred[p] = false then
+						inferred[p]←true
+						for each clause c in KB where p is in c.PREMISE do
+							decrement count[c]
+							if count[c] = 0 then add c.CONCLUSION to agenda
+					*/
+				}
+				Result = "NO";
+				// end of FC procedure
 
 			} else if (Query.InferenceType == InferenceType.BC) {
 				// TODO Implement Backward Chaining Query Here
