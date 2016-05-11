@@ -26,7 +26,7 @@ namespace InferenceEngine
 			HornClauseImplicationClass ImplicationClause1 = new HornClauseImplicationClass (Fact1,Fact2);
 			MyKB.Clauses.Add (ImplicationClause1);
 
-			QueryClass MyQuery = new QueryClass (Fact1,InferenceType.TT);
+			QueryClass MyQuery = new QueryClass (Fact1,InferenceType.FC);
 			//QueryClass MyQuery = new QueryClass (Fact2,InferenceType.TT);
 
 			string Result = MyKB.MakeQuery (MyQuery);

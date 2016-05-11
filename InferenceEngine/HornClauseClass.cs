@@ -8,11 +8,20 @@ namespace InferenceEngine
 
     abstract public class HornClauseClass
 	{
+		public HornClauseClassType Type;
+
 		public HornClauseClass ()
 		{
 		}
 
 		virtual public List<String> GetSymbols(){
+			// Inherited
+			List<String> Symbols = new List<string> ();
+			Symbols.Add ("This shouldn't be run");
+			return Symbols;
+		}
+
+		virtual public List<String> GetPremiseSymbols(){
 			// Inherited
 			List<String> Symbols = new List<string> ();
 			Symbols.Add ("This shouldn't be run");

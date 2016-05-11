@@ -18,6 +18,7 @@ namespace InferenceEngine
 		{
 			this.Premise = Premise;
 			this.Conclusion = Conclusion;
+			this.Type = HornClauseClassType.Implication;
 		}
 
 		// Method to return the symbols contained within the Implication Clause
@@ -36,6 +37,26 @@ namespace InferenceEngine
 			}
 
 			foreach (String Symbol in ConclusionSymbols) {
+				if (!AllSymbols.Contains (Symbol)) {
+					// only add symbols that aren't already contained
+					AllSymbols.Add (Symbol);
+				}
+			}
+
+			return AllSymbols;
+		}
+
+
+
+		// Method to return the symbols contained within the Implication Clause premise
+		public override List<String> GetPremiseSymbols()
+		{
+			List<String> AllSymbols = new List<string> ();
+
+			List<String> PremiseSymbols = Premise.GetSymbols ();
+
+
+			foreach (String Symbol in PremiseSymbols) {
 				if (!AllSymbols.Contains (Symbol)) {
 					// only add symbols that aren't already contained
 					AllSymbols.Add (Symbol);
