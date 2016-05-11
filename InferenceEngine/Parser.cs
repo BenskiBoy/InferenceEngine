@@ -32,16 +32,16 @@ namespace InferenceEngine
             foreach (String sentence in line.Where(n=>n != ""))
             {
 
-                temp = Sentence2Clause(sentence);
+                HornClauseClass temp = Sentence2Clause(sentence);
                 if (temp != null)
                 {
-
+                    result.Add(temp);
                 }
                 
             }
             return result;
         }
-        public QueryClass GetQuerySymbol(String file)
+        public QueryClass GetQuery(String file)
         {
             String[] fileData = System.IO.File.ReadAllLines(file);
             int QueryLine = 0;
@@ -53,31 +53,35 @@ namespace InferenceEngine
                     break;
                 }
             }
-            QueryClass result = new QueryClass();
-            result.PropositionSymbol = fileData[QueryLine];
-            return result;
+            HornClauseFactClass temp = new HornClauseFactClass(fileData[QueryLine]);
+            return new QueryClass(temp);
         }
         private HornClauseClass Sentence2Clause(String sentence)
         {
-            HornClauseClass result;
             String[] symbols = GetSymbols(sentence);
             List<HornClauseFactClass> facts = new List<HornClauseFactClass>();
-            foreach (String str in symbols)
+            if (Regex.IsMatch(sentence, "=>"))
             {
-                HornClauseFactClass temp = new HornClauseFactClass();
-                temp.Symbol = symbols[0];
-                facts.Add(temp);
+                String[] separator = { "=>" };
+                String[] temp = sentence.Split(separator, System.StringSplitOptions.RemoveEmptyEntries);
+                HornClauseClass tempHorn1 = Sentence2Clause(temp[0]);
+                HornClauseClass tempHorn2 = Sentence2Clause(temp[1]);
+                return new HornClauseImplicationClass(tempHorn1, tempHorn2);
             }
-            String[] operators = GetOperator(sentence);
-            if (operators.Count() == 0)
+            else if (Regex.IsMatch(sentence, "&")){
+                String[] temp = sentence.Split('&');
+                HornClauseClass tempHorn1 = Sentence2Clause(temp[0]);
+                HornClauseClass tempHorn2 = Sentence2Clause(temp[1]);
+                return new HornClauseAndClass(tempHorn1, tempHorn2);
+            }
+            else if(Regex.IsMatch(sentence, "^[a-zA-Z][a-zA-Z0-9_]*$"))
             {
-                result =facts[0];
+                return new HornClauseFactClass(sentence);
             }
             else
             {
-                result = null;
+                return null;
             }
-            return result;
         }
         private String[] GetSymbols(String str)
         {
