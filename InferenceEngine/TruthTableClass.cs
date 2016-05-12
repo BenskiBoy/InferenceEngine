@@ -71,6 +71,7 @@ namespace InferenceEngine
 
                     SymbolValues.Add(TempSymbolValue);
                 }
+
                 //SymbolValues now contains all symbols but still need to set values
                 foreach (List<Boolean> Row in Table)
                 {
@@ -86,8 +87,7 @@ namespace InferenceEngine
                             }
                         }
                     }
-
-					Row[ClauseNum + KB.Symbols.Count] = KB.Clauses[ClauseNum].Evaluate(SymbolValues);
+                    Row[ClauseNum + KB.Symbols.Count] = KB.Clauses[ClauseNum].Evaluate(SymbolValues);
                 }
             }
 
@@ -109,7 +109,8 @@ namespace InferenceEngine
         }
 
 		// Method to evaluate the querey collumn of the TT 
-		public Boolean EvaluateQuery(QueryClass Query)
+        // return value shows number of times query enatils KB...(TODO: Write wording?) 
+		public int EvaluateQuery(QueryClass Query)
 		{
 			// first fill in the collumn, then check if query is a subset of
 			// the valid worlds of the TT (the rows where SUM clauses = true)
@@ -149,22 +150,23 @@ namespace InferenceEngine
 			// Check if query is a subset of the valid worlds of the TT 
 			// (the rows where SUM clauses = true)
 
-			Boolean QueryResult = true;
-
+			Boolean QueryResult = false;
+            int NumberOfTimesTrue = 0;
 			foreach (List<Boolean> Row in Table) {
 				if (Row [KB.Symbols.Count + KB.Clauses.Count + 1] == true) {
 					// if the query entry is true, check if the SUM clauses entry it true
 					if (Row [KB.Symbols.Count + KB.Clauses.Count] == true) {
-						// if it's true, then don't change the temp bool
-					} else {
-						// if it's untrue, then change the QueryResult to false.
-						// as the Query is NOT a subset of the valid worlds
-						QueryResult = false;
-					}
-				}
+                        // if it's untrue, then change the QueryResult to false.
+                        // as the Query is NOT a subset of the valid worlds
+                        NumberOfTimesTrue++;
+                        QueryResult = true;
+                    } else {
+                        // if it's true, then don't change the temp bool
+                    }
+                }
 			}
 
-			return QueryResult;
+			return NumberOfTimesTrue;
 
 		}
 

@@ -21,7 +21,7 @@ namespace InferenceEngine
 		public String MakeQuery (QueryClass Query)
 		{
 			String Result = "Initialised";
-			Boolean QueryResult;
+			int QueryResult;
 			int NumValidWorlds = 0;
 			if (Query.InferenceType == InferenceType.TT) {
 				// Implement Truth Table Query Here
@@ -36,7 +36,7 @@ namespace InferenceEngine
 				QueryResult = MyTT.EvaluateQuery (Query);
 
 				// Format the Result string
-				if (QueryResult == true) {
+				if (QueryResult > 0) {
 					// "When the method is TT and the answer is YES, 
 					// it should be followed by a colon (:) and 
 					// the number of models of KB"
@@ -100,6 +100,8 @@ namespace InferenceEngine
 				List<String> CPremiseSymbols = new List <String> ();
 				Boolean TempBool = false;
 
+                String ResultSymbols = "";
+                             
 				while (Agenda.Count > 0) {
 					// while agenda is not empty
 					// assign the first item of the agenda to P
@@ -109,9 +111,9 @@ namespace InferenceEngine
 
 					// return true if P = Q 
 					if (P == Query.QueryClause.GetPremiseSymbols()[0]) {
-						Result = "YES";
+						Result = "YES: " + ResultSymbols + P;
+                        return Result;
 					}
-
 
 					int SymbolIndex = 0;
 					// find the corresponding index for the symbol P
@@ -126,8 +128,9 @@ namespace InferenceEngine
 					if( SymbolIsInferred [SymbolIndex] == false) {
 						// set the inferred[p] to true;
 						SymbolIsInferred [SymbolIndex] = true;
+                        ResultSymbols += Symbols[SymbolIndex] + ", ";
 
-						for (int ClauseNum = 0; ClauseNum < this.Clauses.Count; ClauseNum++){
+                        for (int ClauseNum = 0; ClauseNum < this.Clauses.Count; ClauseNum++){
 							// check if P is in C.premise
 							CPremiseSymbols = new List <String> ();
 							CPremiseSymbols = this.Clauses[ClauseNum].GetPremiseSymbols ();
@@ -149,14 +152,6 @@ namespace InferenceEngine
 
 						}
 					}
-					/*
-				  	if p = q then return true 
-				  	if inferred[p] = false then
-						inferred[p]←true
-						for each clause c in KB where p is in c.PREMISE do
-							decrement count[c]
-							if count[c] = 0 then add c.CONCLUSION to agenda
-					*/
 				}
 				Result = "NO";
 				// end of FC procedure
