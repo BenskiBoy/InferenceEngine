@@ -13,10 +13,20 @@ namespace InferenceEngine
 		public HornClauseFactClass (String Symbol)
 		{
 			this.Symbol = Symbol;
+			this.Type = HornClauseClassType.Fact;
 		}
 
 		// Method to return the symbol contained within the Fact Clause
 		public override List<String> GetSymbols()
+		{
+			List<String> Symbols = new List<string> ();
+			Symbols.Add (Symbol);
+			return Symbols;
+		}
+
+
+		// Method to return the premise symbols contained within the Fact Clause
+		public override List<String> GetPremiseSymbols()
 		{
 			List<String> Symbols = new List<string> ();
 			Symbols.Add (Symbol);

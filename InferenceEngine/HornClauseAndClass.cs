@@ -17,6 +17,7 @@ namespace InferenceEngine
         {
 			this.Premise1 = Premise1;
 			this.Premise2 = Premise2;
+			this.Type = HornClauseClassType.And;
         }
 
         // Method to return the symbols contained within the "And" Clause
@@ -49,7 +50,7 @@ namespace InferenceEngine
         }
 
         // Method to return the premise symbols contained within the "And" Clause
-        public List<String> GetPremiseSymbols()
+		public override List<String> GetPremiseSymbols()
         {
             List<String> AllSymbols = new List<string>();
             List<String> Premise1Symbols = Premise1.GetSymbols();

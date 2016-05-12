@@ -45,6 +45,7 @@
     <Compile Include="InferenceType.cs" />
     <Compile Include="SymbolValue.cs" />
     <Compile Include="TruthTableClass.cs" />
+    <Compile Include="HornClauseClassType.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
