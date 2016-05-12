@@ -16,7 +16,6 @@ namespace InferenceEngine
         public List<HornClauseClass> GetKB(String file)
         {
             List<HornClauseClass> result = new List<HornClauseClass>();
-            String[] precidenceArray = { "=>", "|", "&", "!" };
             String[] fileData = System.IO.File.ReadAllLines(file);
             int ClauseLine = 0;
             for(int i = 0; i < fileData.Count(); i++)
@@ -41,7 +40,7 @@ namespace InferenceEngine
             }
             return result;
         }
-        public QueryClass GetQuery(String file)
+        public HornClauseFactClass GetQuery(String file)
         {
             String[] fileData = System.IO.File.ReadAllLines(file);
             int QueryLine = 0;
@@ -53,12 +52,10 @@ namespace InferenceEngine
                     break;
                 }
             }
-            HornClauseFactClass temp = new HornClauseFactClass(fileData[QueryLine]);
-            return new QueryClass(temp);
+            return new HornClauseFactClass(fileData[QueryLine]);
         }
         private HornClauseClass Sentence2Clause(String sentence)
         {
-            String[] symbols = GetSymbols(sentence);
             List<HornClauseFactClass> facts = new List<HornClauseFactClass>();
             if (Regex.IsMatch(sentence, "=>"))
             {
