@@ -4,20 +4,19 @@ using System.Collections.Generic;
 namespace InferenceEngine
 {
 	// Class to model the behaviour of a Truth Table, used in the TT Query Method
-	public class TruthTableClass
+	class TruthTableClass : InferenceType
 	{
 		// Attributes
-		public KnowledgeBaseClass KB = new KnowledgeBaseClass(); // The associated KB (linked to the actual KB due to C#)
 		public List <List <Boolean>> Table = new List<List<Boolean>>(); // The actual TT
 
 		// Methods
-		public TruthTableClass (KnowledgeBaseClass KB)
+		public TruthTableClass (List<HornClauseClass> KB, QueryClass Query)
 		{
-			this.KB = KB;   // Assign the KB to the object being constructed
-
+			KnowledgeBase = KB;   // Assign the KB to the object being constructed
+            LoadSymbolsList(Query);
             // create 2^n Rows, with n + 1 collumns (+1 column for the query result)
-            int NumSymbols = KB.Symbols.Count;  // The order of this list is the order of columns in the table
-            int NumClauses = KB.Clauses.Count;
+            int NumSymbols = Symbols.Count;  // The order of this list is the order of columns in the table
+            int NumClauses = KnowledgeBase.Count;
 
             List<Boolean> TempRow = new List<bool>();   // used to build rows before they are put into the table
 
@@ -51,19 +50,22 @@ namespace InferenceEngine
                 }
                 Table.Add(TempRow); // Add row to the table
             }
-            Console.WriteLine("TT World Computation Done");
+            EvaluateClauses();
+            //Console.WriteLine("TT World Computation Done");
         }
 
-        // Method to evaluate the clause collumns of the TT 
-        public void EvaluateClauses()
+        // Method to evaluate the clause collumns of the TT
+        
+        // Is this even used? 
+        private void EvaluateClauses()
         {
             List<String> ClauseSymbols = new List<String>();
             List<SymbolValue> SymbolValues = new List<SymbolValue>();
             SymbolValue TempSymbolValue = new SymbolValue();
 
-            for (int ClauseNum = 0; ClauseNum < KB.Clauses.Count; ClauseNum++)
+            for (int ClauseNum = 0; ClauseNum < KnowledgeBase.Count; ClauseNum++)
             {
-                ClauseSymbols = KB.Clauses[ClauseNum].GetSymbols();
+                ClauseSymbols = KnowledgeBase[ClauseNum].GetSymbols();
                 foreach (String clausey in ClauseSymbols)
                 {
                     TempSymbolValue.SymbolName = clausey;
@@ -75,11 +77,11 @@ namespace InferenceEngine
                 //SymbolValues now contains all symbols but still need to set values
                 foreach (List<Boolean> Row in Table)
                 {
-                    for (int ColNum = 0; ColNum < KB.Symbols.Count; ColNum++)
+                    for (int ColNum = 0; ColNum < Symbols.Count; ColNum++)
                     {
                         for (int ClauseSymbolNum = 0; ClauseSymbolNum < SymbolValues.Count; ClauseSymbolNum++)
                         {
-                            if (KB.Symbols[ColNum] == SymbolValues[ClauseSymbolNum].SymbolName)
+                            if (Symbols[ColNum] == SymbolValues[ClauseSymbolNum].SymbolName)
                             {
                                 TempSymbolValue = SymbolValues[ClauseSymbolNum];
                                 TempSymbolValue.Value = Row[ColNum];
@@ -87,7 +89,7 @@ namespace InferenceEngine
                             }
                         }
                     }
-                    Row[ClauseNum + KB.Symbols.Count] = KB.Clauses[ClauseNum].Evaluate(SymbolValues);
+                    Row[ClauseNum + Symbols.Count] = KnowledgeBase[ClauseNum].Evaluate(SymbolValues);
                 }
             }
 
@@ -97,79 +99,198 @@ namespace InferenceEngine
             foreach (List<Boolean> Row in Table)
             {
                 tempBool = true; // re-init to true
-				for (int ClauseNum = 0; ClauseNum < KB.Clauses.Count; ClauseNum++)
+				for (int ClauseNum = 0; ClauseNum < KnowledgeBase.Count; ClauseNum++)
                 {
-					if(!Row[KB.Symbols.Count + ClauseNum])
+					if(!Row[Symbols.Count + ClauseNum])
                     {
                         tempBool = false;
                     }
                 }
-                Row[KB.Symbols.Count + KB.Clauses.Count] = tempBool;
+                Row[Symbols.Count + KnowledgeBase.Count] = tempBool;
             }
         }
 
-		// Method to evaluate the querey collumn of the TT 
+        // Method to evaluate the querey collumn of the TT 
         // return value shows number of times query enatils KB...(TODO: Write wording?) 
-		public int EvaluateQuery(QueryClass Query)
-		{
-			// first fill in the collumn, then check if query is a subset of
-			// the valid worlds of the TT (the rows where SUM clauses = true)
+        override public string EvaluateQuery(QueryClass Query)
+        {
+            // first fill in the collumn, then check if query is a subset of
+            // the valid worlds of the TT (the rows where SUM clauses = true)
+            LoadSymbolsList(Query);
+            List<String> ClauseSymbols = new List<String>();
+            List<SymbolValue> SymbolValues = new List<SymbolValue>();
+            SymbolValue TempSymbolValue = new SymbolValue();
 
-			List<String> ClauseSymbols = new List<String>();
-			List<SymbolValue> SymbolValues = new List<SymbolValue>();
-			SymbolValue TempSymbolValue = new SymbolValue();
 
+            ClauseSymbols = Query.QueryClause.GetSymbols();
+            foreach (String clausey in ClauseSymbols)
+            {
+                TempSymbolValue.SymbolName = clausey;
+                TempSymbolValue.Value = false; //Set to false by default
 
-			ClauseSymbols = Query.QueryClause.GetSymbols();
-			foreach (String clausey in ClauseSymbols)
-			{
-				TempSymbolValue.SymbolName = clausey;
-				TempSymbolValue.Value = false; //Set to false by default
+                SymbolValues.Add(TempSymbolValue);
+            }
+            //SymbolValues now contains all symbols but still need to set values
+            foreach (List<Boolean> Row in Table)
+            {
+                for (int ColNum = 0; ColNum < Symbols.Count; ColNum++)
+                {
+                    for (int ClauseSymbolNum = 0; ClauseSymbolNum < SymbolValues.Count; ClauseSymbolNum++)
+                    {
+                        if (Symbols[ColNum] == SymbolValues[ClauseSymbolNum].SymbolName)
+                        {
+                            TempSymbolValue = SymbolValues[ClauseSymbolNum];
+                            TempSymbolValue.Value = Row[ColNum];
+                            SymbolValues[ClauseSymbolNum] = TempSymbolValue;
+                        }
+                    }
+                }
 
-				SymbolValues.Add(TempSymbolValue);
-			}
-			//SymbolValues now contains all symbols but still need to set values
-			foreach (List<Boolean> Row in Table)
-			{
-				for (int ColNum = 0; ColNum < KB.Symbols.Count; ColNum++)
-				{
-					for (int ClauseSymbolNum = 0; ClauseSymbolNum < SymbolValues.Count; ClauseSymbolNum++)
-					{
-						if (KB.Symbols[ColNum] == SymbolValues[ClauseSymbolNum].SymbolName)
-						{
-							TempSymbolValue = SymbolValues[ClauseSymbolNum];
-							TempSymbolValue.Value = Row[ColNum];
-							SymbolValues[ClauseSymbolNum] = TempSymbolValue;
-						}
-					}
-				}
+                Row[Symbols.Count + KnowledgeBase.Count + 1] = Query.QueryClause.Evaluate(SymbolValues);
+            }
 
-				Row[KB.Symbols.Count + KB.Clauses.Count + 1] = Query.QueryClause.Evaluate(SymbolValues);
-			}
+            // Check if query is a subset of the valid worlds of the TT 
+            // (the rows where SUM clauses = true)
 
-			// Check if query is a subset of the valid worlds of the TT 
-			// (the rows where SUM clauses = true)
-
-			Boolean QueryResult = false;
+            Boolean QueryResult = false;
             int NumberOfTimesTrue = 0;
-			foreach (List<Boolean> Row in Table) {
-				if (Row [KB.Symbols.Count + KB.Clauses.Count + 1] == true) {
-					// if the query entry is true, check if the SUM clauses entry it true
-					if (Row [KB.Symbols.Count + KB.Clauses.Count] == true) {
+            foreach (List<Boolean> Row in Table)
+            {
+                if (Row[Symbols.Count + KnowledgeBase.Count + 1] == true)
+                {
+                    // if the query entry is true, check if the SUM clauses entry it true
+                    if (Row[Symbols.Count + KnowledgeBase.Count] == true)
+                    {
                         // if it's untrue, then change the QueryResult to false.
                         // as the Query is NOT a subset of the valid worlds
                         NumberOfTimesTrue++;
                         QueryResult = true;
-                    } else {
+                    }
+                    else
+                    {
                         // if it's true, then don't change the temp bool
                     }
                 }
-			}
+            }
 
-			return NumberOfTimesTrue;
+            //return NumberOfTimesTrue;
+            //return "placeholderstring";
+            // Format the Result string
+            int NumValidWorlds = 0;
+            if (NumberOfTimesTrue > 0)
+            {
+                // "When the method is TT and the answer is YES, 
+                // it should be followed by a colon (:) and 
+                // the number of models of KB"
+                // TODO Work out what the hell that means
+                // Ric: maybe this is the number of valid worlds?
 
-		}
+                // count the number of valid worlds in the TT
+                foreach (List<Boolean> Row in Table)
+                {
+                    if (Row[this.Symbols.Count + KnowledgeBase.Count] == true)
+                    {
+                        // if the world is valid, increment the counted
+                        NumValidWorlds = NumValidWorlds + 1;
+                    }
+                }
 
+                return "YES: " + NumValidWorlds;
+            }
+            else
+            {
+                return "NO";
+            }
+
+        }
+        public string EvaluateQuery(QueryClass Query,char d)
+        {
+            // first fill in the collumn, then check if query is a subset of
+            // the valid worlds of the TT (the rows where SUM clauses = true)
+
+            List<String> ClauseSymbols = new List<String>();
+            List<SymbolValue> SymbolValues = new List<SymbolValue>();
+            SymbolValue TempSymbolValue = new SymbolValue();
+
+
+            ClauseSymbols = Query.QueryClause.GetSymbols();
+            foreach (String clausey in ClauseSymbols)
+            {
+                TempSymbolValue.SymbolName = clausey;
+                TempSymbolValue.Value = false; //Set to false by default
+
+                SymbolValues.Add(TempSymbolValue);
+            }
+            //SymbolValues now contains all symbols but still need to set values
+            foreach (List<Boolean> Row in Table)
+            {
+                for (int ColNum = 0; ColNum < Symbols.Count; ColNum++)
+                {
+                    for (int ClauseSymbolNum = 0; ClauseSymbolNum < SymbolValues.Count; ClauseSymbolNum++)
+                    {
+                        if (Symbols[ColNum] == SymbolValues[ClauseSymbolNum].SymbolName)
+                        {
+                            TempSymbolValue = SymbolValues[ClauseSymbolNum];
+                            TempSymbolValue.Value = Row[ColNum];
+                            SymbolValues[ClauseSymbolNum] = TempSymbolValue;
+                        }
+                    }
+                }
+
+                Row[Symbols.Count + KnowledgeBase.Count + 1] = Query.QueryClause.Evaluate(SymbolValues);
+            }
+
+            // Check if query is a subset of the valid worlds of the TT 
+            // (the rows where SUM clauses = true)
+
+            Boolean QueryResult = false;
+            int NumberOfTimesTrue = 0;
+            foreach (List<Boolean> Row in Table)
+            {
+                if (Row[Symbols.Count + KnowledgeBase.Count + 1] == true)
+                {
+                    // if the query entry is true, check if the SUM clauses entry it true
+                    if (Row[Symbols.Count + KnowledgeBase.Count] == true)
+                    {
+                        // if it's untrue, then change the QueryResult to false.
+                        // as the Query is NOT a subset of the valid worlds
+                        NumberOfTimesTrue++;
+                        QueryResult = true;
+                    }
+                    else
+                    {
+                        // if it's true, then don't change the temp bool
+                    }
+                }
+            }
+
+            // Format the Result string
+            int NumValidWorlds = 0;
+            if (NumberOfTimesTrue > 0)
+            {
+                // "When the method is TT and the answer is YES, 
+                // it should be followed by a colon (:) and 
+                // the number of models of KB"
+                // TODO Work out what the hell that means
+                // Ric: maybe this is the number of valid worlds?
+
+                // count the number of valid worlds in the TT
+                foreach (List<Boolean> Row in Table)
+                {
+                    if (Row[this.Symbols.Count + KnowledgeBase.Count] == true)
+                    {
+                        // if the world is valid, increment the counted
+                        NumValidWorlds = NumValidWorlds + 1;
+                    }
+                }
+
+                return "YES: " + NumValidWorlds;
+            }
+            else
+            {
+                return "NO";
+            }
+        }
         // Method to print the TT 
         public void PrintTT ()
 		{
@@ -177,12 +298,12 @@ namespace InferenceEngine
 
 			// first print collumn titles
 			// put in the symbol headers
-			foreach (String Symbol in KB.Symbols) {
+			foreach (String Symbol in Symbols) {
 				RowString = RowString + Symbol + "    " + " | ";
 			}
 
 			// put in the clause headers
-			for (int ClauseNum = 0; ClauseNum < KB.Clauses.Count; ClauseNum ++) {
+			for (int ClauseNum = 0; ClauseNum < KnowledgeBase.Count; ClauseNum ++) {
 				RowString = RowString + "Cl" + ClauseNum.ToString() + "  " + " | ";
 			}
 

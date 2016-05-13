@@ -40,7 +40,7 @@ namespace InferenceEngine
             }
             return result;
         }
-        public HornClauseFactClass GetQuery(String file)
+        public HornClauseClass GetQuery(String file)
         {
             String[] fileData = System.IO.File.ReadAllLines(file);
             int QueryLine = 0;
@@ -52,7 +52,7 @@ namespace InferenceEngine
                     break;
                 }
             }
-            return new HornClauseFactClass(fileData[QueryLine]);
+            return Sentence2Clause(fileData[QueryLine]);
         }
         private HornClauseClass Sentence2Clause(String sentence)
         {

@@ -33,16 +33,16 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ForwardChaining.cs" />
+    <Compile Include="InferenceType.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryClass.cs" />
-    <Compile Include="KnowledgeBaseClass.cs" />
     <Compile Include="HornClauseClass.cs" />
     <Compile Include="HornClauseFactClass.cs" />
     <Compile Include="HornClauseAndClass.cs" />
     <Compile Include="HornClauseImplicationClass.cs" />
-    <Compile Include="InferenceType.cs" />
     <Compile Include="SymbolValue.cs" />
     <Compile Include="TruthTableClass.cs" />
     <Compile Include="HornClauseClassType.cs" />
