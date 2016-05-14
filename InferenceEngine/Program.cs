@@ -9,7 +9,7 @@ namespace InferenceEngine
 		{
             // args[0] method
             // args[1] filename
-            String inference = "TT";
+            String inference = "BC";
             String fileName = "test1.txt";
 
             Parser P = new Parser();
@@ -17,6 +17,18 @@ namespace InferenceEngine
 
             List<HornClauseClass> parsedKB = P.GetKB(fileName);
             QueryClass parsedQuery =  new QueryClass(P.GetQuery(fileName));
+
+            foreach (HornClauseClass h in parsedKB)
+            {
+                if(h.GetType().Name == "HornClauseImplicationClass")
+                {
+                    Console.WriteLine("implication");
+                }
+                else if(h.GetType().Name == "HornClauseFactClass")
+                {
+                    Console.WriteLine("FACT");
+                }
+            }
 
             switch (inference)
             {
@@ -26,6 +38,9 @@ namespace InferenceEngine
 
                 case "FC":
                     iEngine = new ForwardChaining(parsedKB);
+                    break;
+                case "BC":
+                    iEngine = new BackwardChaining(parsedKB);
                     break;
                 default:
                     Console.WriteLine("Inference Type code invalid");
