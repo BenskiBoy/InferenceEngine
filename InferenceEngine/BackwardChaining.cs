@@ -30,7 +30,11 @@ namespace InferenceEngine
                 {
                     //null should say that it wasn't a conclusion or a fact in the knowledge base
                     //and therefore should return null
-                    return "NO";
+                    if (goals.Count == 0)
+                    {
+                        return "NO";
+                    }
+                    
                 }
                 else if(ex.GetType().Name == "HornClauseImplicationClass")
                 {
@@ -77,6 +81,22 @@ namespace InferenceEngine
                     }
                 }
             }
+            return null;
+        }
+        public HornClauseClass premiseOf(String symbol)
+        {
+            foreach(HornClauseClass clause in KnowledgeBase.Where(s=>s.GetType().Name != "HornClauseFactClass"))
+            {
+                List<String> temp = clause.GetPremiseSymbols();
+                foreach(String str in temp)
+                {
+                    if(str == symbol)
+                    {
+                        return clause;
+                    }
+                }
+            }
+
             return null;
         }
     }
