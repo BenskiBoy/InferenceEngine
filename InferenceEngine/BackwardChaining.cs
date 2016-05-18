@@ -16,10 +16,15 @@ namespace InferenceEngine
         {
             LoadSymbolsList(Query);
             string Result = "YES: ";
+			// initialise our goals list to the symbol(s) contained within the query
             List<string> goals = Query.QueryClause.GetSymbols();
             List<string> searched = new List<string>();
             List<bool> searchedBools = new List<bool>();
 
+			// starting from the symbol query, iteratively check if each symbol in the goals list
+			// is a conclusion of another KB clause, or is a fact.
+			// if the symbol is a conclusion of another KB clause, then we add the symbols of 
+			// the premise of that clause to the goals symbols list
             while (goals.Count > 0)
             {
                 String goal = goals[0];
@@ -43,16 +48,24 @@ namespace InferenceEngine
                 }
                 else if(ex.GetType().Name == "HornClauseFactClass")
                 {
-                    //If it is a fact it shoud work forward again making things true.
+                    //If it is a fact it should work forward again making things true.
                     //This just looks at searched stuff it doesn't go through making things true
                     searched.Reverse();
                     foreach(string str in searched)
                     {
                         Result += " "+str+",";
                     }
-                    return Result;
+                    //return Result;
                 }
+
             }
+			// after the above while loop finishes, we have a list of premises that 
+			// we care about in the searched list.
+			// now we need to reverse the searched list and then evaluate each symbol
+			// in this order
+			return Result;
+			searched.Reverse();
+			//TODO - include query evaluation logic
 
             return "NO";
         }

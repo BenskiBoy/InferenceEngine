@@ -35,7 +35,6 @@ namespace InferenceEngine
                 case "TT":
                     iEngine = new TruthTableClass(parsedKB, parsedQuery);
                     break;
-
                 case "FC":
                     iEngine = new ForwardChaining(parsedKB);
                     break;
