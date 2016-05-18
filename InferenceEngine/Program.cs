@@ -18,18 +18,6 @@ namespace InferenceEngine
             List<HornClauseClass> parsedKB = P.GetKB(fileName);
             QueryClass parsedQuery =  new QueryClass(P.GetQuery(fileName));
 
-            foreach (HornClauseClass h in parsedKB)
-            {
-                if(h.GetType().Name == "HornClauseImplicationClass")
-                {
-                    Console.WriteLine("implication");
-                }
-                else if(h.GetType().Name == "HornClauseFactClass")
-                {
-                    Console.WriteLine("FACT");
-                }
-            }
-
             switch (inference)
             {
                 case "TT":
@@ -47,11 +35,6 @@ namespace InferenceEngine
             }
             String Result = iEngine.EvaluateQuery(parsedQuery);
             Console.WriteLine (Result);
-
-            
-
-            int i = 1;
-
 		}
 	}
 }

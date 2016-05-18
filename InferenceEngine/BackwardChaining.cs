@@ -14,8 +14,7 @@ namespace InferenceEngine
         }
         public override string EvaluateQuery(QueryClass Query)
         {
-            LoadSymbolsList(Query);
-            string Result = "YES: ";
+            string Result = "YES:";
 			// initialise our goals list to the symbol(s) contained within the query
             List<string> goals = Query.QueryClause.GetSymbols();
             List<string> searched = new List<string>();
@@ -35,39 +34,33 @@ namespace InferenceEngine
                 {
                     //null should say that it wasn't a conclusion or a fact in the knowledge base
                     //and therefore should return null
-                    if (goals.Count == 0)
-                    {
-                        return "NO";
-                    }
+                    return "NO";
                     
                 }
                 else if(ex.GetType().Name == "HornClauseImplicationClass")
                 {
                     //probably should keep the clauses
-                    goals.AddRange(ex.GetPremiseSymbols());
-                }
-                else if(ex.GetType().Name == "HornClauseFactClass")
-                {
-                    //If it is a fact it should work forward again making things true.
-                    //This just looks at searched stuff it doesn't go through making things true
-                    searched.Reverse();
-                    foreach(string str in searched)
+                    List<String> temp = ex.GetPremiseSymbols();
+                    foreach(String str in temp)
                     {
-                        Result += " "+str+",";
+                        if (!goals.Contains(str)&&!searched.Contains(str))
+                        {
+                            goals.Add(str);
+                        }
                     }
-                    //return Result;
+
                 }
-
             }
-			// after the above while loop finishes, we have a list of premises that 
-			// we care about in the searched list.
-			// now we need to reverse the searched list and then evaluate each symbol
-			// in this order
-			return Result;
-			searched.Reverse();
-			//TODO - include query evaluation logic
-
-            return "NO";
+            searched.Reverse();
+            for (int i = 0; i < searched.Count; i++)
+            {
+                Result += " " + searched[i];
+                if (i < searched.Count - 1)
+                {
+                    Result += ",";
+                }
+            }
+            return Result;
         }
         /// <summary>
         /// Checks if the symboo is the conclusion of an implication or fact
@@ -96,7 +89,7 @@ namespace InferenceEngine
             }
             return null;
         }
-        public HornClauseClass premiseOf(String symbol)
+        public bool isPremiseInKB(String symbol)
         {
             foreach(HornClauseClass clause in KnowledgeBase.Where(s=>s.GetType().Name != "HornClauseFactClass"))
             {
@@ -105,12 +98,12 @@ namespace InferenceEngine
                 {
                     if(str == symbol)
                     {
-                        return clause;
+                        return true;
                     }
                 }
             }
 
-            return null;
+            return false;
         }
     }
 }
