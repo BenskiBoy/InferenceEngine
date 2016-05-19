@@ -35,6 +35,7 @@
   <ItemGroup>
     <Compile Include="BackwardChaining.cs" />
     <Compile Include="ForwardChaining.cs" />
+    <Compile Include="HornClauseBracketClass.cs" />
     <Compile Include="InferenceType.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Program.cs" />

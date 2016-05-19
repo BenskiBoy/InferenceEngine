@@ -56,15 +56,23 @@ namespace InferenceEngine
         }
         private HornClauseClass Sentence2Clause(String sentence)
         {
-			if (Regex.IsMatch(sentence, "<=>"))
+			if (sentence.Contains("("))
 			{
-				String[] separator = { "<=>" };
+				String[] separator = { "(" };
 				String[] temp = sentence.Split(separator, System.StringSplitOptions.RemoveEmptyEntries);
 				HornClauseClass tempHorn1 = Sentence2Clause(temp[0]);
 				HornClauseClass tempHorn2 = Sentence2Clause(temp[1]);
 				return new HornClauseBidirectionalClass(tempHorn1, tempHorn2);
 			}
-			if (Regex.IsMatch(sentence, "=>"))
+            else if (sentence.Contains("<=>"))
+            {
+                String[] separator = { "<=>" };
+                String[] temp = sentence.Split(separator, System.StringSplitOptions.RemoveEmptyEntries);
+                HornClauseClass tempHorn1 = Sentence2Clause(temp[0]);
+                HornClauseClass tempHorn2 = Sentence2Clause(temp[1]);
+                return new HornClauseBidirectionalClass(tempHorn1, tempHorn2);
+            }
+            else if (sentence.Contains("=>"))
             {
                 String[] separator = { "=>" };
                 String[] temp = sentence.Split(separator, System.StringSplitOptions.RemoveEmptyEntries);
@@ -72,21 +80,21 @@ namespace InferenceEngine
                 HornClauseClass tempHorn2 = Sentence2Clause(temp[1]);
                 return new HornClauseImplicationClass(tempHorn1, tempHorn2);
             }
-			else if (Regex.IsMatch(sentence, "OR")){
-				String[] separator = { "OR" };
+			else if (sentence.Contains("\\/")){
+				String[] separator = { "\\/" };
 				String[] temp = sentence.Split(separator, System.StringSplitOptions.RemoveEmptyEntries);
 				HornClauseClass tempHorn1 = Sentence2Clause(temp[0]);
 				HornClauseClass tempHorn2 = Sentence2Clause(temp[1]);
 				return new HornClauseOrClass(tempHorn1, tempHorn2);
 			}
-			else if (Regex.IsMatch(sentence, "&")){
+			else if (sentence.Contains("&")){
                 String[] temp = sentence.Split('&');
                 HornClauseClass tempHorn1 = Sentence2Clause(temp[0]);
                 HornClauseClass tempHorn2 = Sentence2Clause(temp[1]);
                 return new HornClauseAndClass(tempHorn1, tempHorn2);
             }
-			else if (Regex.IsMatch(sentence, "NOT")){
-				String[] separator = { "NOT" };
+			else if (sentence.Contains("~")){
+				String[] separator = { "~" };
 				String[] temp = sentence.Split(separator, System.StringSplitOptions.RemoveEmptyEntries);
 				HornClauseClass tempHorn1 = Sentence2Clause (temp [0]);
 				return new HornClauseNotClass(tempHorn1);

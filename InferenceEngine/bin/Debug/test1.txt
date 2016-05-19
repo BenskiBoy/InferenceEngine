@@ -1,7 +1,7 @@
 TELL
-cORb<=>a; a;
+a&(B)&c
 ASK
-b
+a
 
 TELL
 p2=> p3; p3 => p1; c => e; b&e => f; f&g => h; p1=>d; p1&p3 => c; a; b; p2;
