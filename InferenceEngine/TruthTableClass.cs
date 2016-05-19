@@ -174,7 +174,7 @@ namespace InferenceEngine
             }
 
             // Format the Result string
-			//this.PrintTT (); // for debugging
+			this.PrintTT (); // for debugging
 			if (QueryResult)
             {
                 // "When the method is TT and the answer is YES, 

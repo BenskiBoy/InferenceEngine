@@ -3,7 +3,7 @@
 namespace InferenceEngine
 {
 	public enum HornClauseClassType
-	{ Fact, And, Implication, Or, Not
+	{ Fact, And, Implication, Or, Not, Biconditional
 	}
 }
 

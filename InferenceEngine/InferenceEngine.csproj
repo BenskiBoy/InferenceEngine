@@ -47,6 +47,9 @@
     <Compile Include="SymbolValue.cs" />
     <Compile Include="TruthTableClass.cs" />
     <Compile Include="HornClauseClassType.cs" />
+    <Compile Include="HornClauseOrClass.cs" />
+    <Compile Include="HornClauseNotClass.cs" />
+    <Compile Include="HornClauseBidirectionalClass.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

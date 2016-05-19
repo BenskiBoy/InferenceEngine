@@ -9,7 +9,7 @@ namespace InferenceEngine
 		{
             // args[0] method
             // args[1] filename
-            String inference = "TT";
+            String inference = "FC";
             String fileName = "test1.txt";
 
             Parser P = new Parser();

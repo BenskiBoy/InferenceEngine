@@ -56,7 +56,15 @@ namespace InferenceEngine
         }
         private HornClauseClass Sentence2Clause(String sentence)
         {
-            if (Regex.IsMatch(sentence, "=>"))
+			if (Regex.IsMatch(sentence, "<=>"))
+			{
+				String[] separator = { "<=>" };
+				String[] temp = sentence.Split(separator, System.StringSplitOptions.RemoveEmptyEntries);
+				HornClauseClass tempHorn1 = Sentence2Clause(temp[0]);
+				HornClauseClass tempHorn2 = Sentence2Clause(temp[1]);
+				return new HornClauseBidirectionalClass(tempHorn1, tempHorn2);
+			}
+			if (Regex.IsMatch(sentence, "=>"))
             {
                 String[] separator = { "=>" };
                 String[] temp = sentence.Split(separator, System.StringSplitOptions.RemoveEmptyEntries);
@@ -64,12 +72,25 @@ namespace InferenceEngine
                 HornClauseClass tempHorn2 = Sentence2Clause(temp[1]);
                 return new HornClauseImplicationClass(tempHorn1, tempHorn2);
             }
-            else if (Regex.IsMatch(sentence, "&")){
+			else if (Regex.IsMatch(sentence, "OR")){
+				String[] separator = { "OR" };
+				String[] temp = sentence.Split(separator, System.StringSplitOptions.RemoveEmptyEntries);
+				HornClauseClass tempHorn1 = Sentence2Clause(temp[0]);
+				HornClauseClass tempHorn2 = Sentence2Clause(temp[1]);
+				return new HornClauseOrClass(tempHorn1, tempHorn2);
+			}
+			else if (Regex.IsMatch(sentence, "&")){
                 String[] temp = sentence.Split('&');
                 HornClauseClass tempHorn1 = Sentence2Clause(temp[0]);
                 HornClauseClass tempHorn2 = Sentence2Clause(temp[1]);
                 return new HornClauseAndClass(tempHorn1, tempHorn2);
             }
+			else if (Regex.IsMatch(sentence, "NOT")){
+				String[] separator = { "NOT" };
+				String[] temp = sentence.Split(separator, System.StringSplitOptions.RemoveEmptyEntries);
+				HornClauseClass tempHorn1 = Sentence2Clause (temp [0]);
+				return new HornClauseNotClass(tempHorn1);
+			}
             else if(Regex.IsMatch(sentence, "^[a-zA-Z][a-zA-Z0-9_]*$"))
             {
                 return new HornClauseFactClass(sentence);
