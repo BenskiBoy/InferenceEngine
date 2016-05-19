@@ -15,7 +15,7 @@ namespace InferenceEngine
         }
         override public string EvaluateQuery(QueryClass Query)
         {
-            // TODO Implement Forward Chaining Query Here
+           
 
             // first load in all of the symbols (clauses and query)
             LoadSymbolsList(Query);
