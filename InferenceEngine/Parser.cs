@@ -56,15 +56,49 @@ namespace InferenceEngine
         }
         private HornClauseClass Sentence2Clause(String sentence)
         {
-			if (sentence.Contains("("))
+			/*if (sentence.Contains("("))
 			{
 				String[] separator = { "(" };
-				String[] temp = sentence.Split(separator, System.StringSplitOptions.RemoveEmptyEntries);
-				HornClauseClass tempHorn1 = Sentence2Clause(temp[0]);
-				HornClauseClass tempHorn2 = Sentence2Clause(temp[1]);
+				String temp1 = sentence.Substring (0, sentence.IndexOf ('('));
+
+				String temp2 = sentence.Substring (sentence.IndexOf ('(')+1,sentence.Length-sentence.IndexOf ('(')-1);
+				String[] RHS;
+
+
+				int OpenBracketCount = 0;
+				int SplitIndex = 0;
+
+				for (int charNum = 0; charNum < temp2.Length; charNum ++) {
+					if (temp2[charNum] == ')') {
+						if (OpenBracketCount == 0) {
+							// we've reached the corresponding close bracket
+							// save this as the SplitIndex
+							SplitIndex = charNum;
+							break;
+						} else {
+							// if not the corresponding bracket, then decrement the OpenBracketCount
+							OpenBracketCount = OpenBracketCount - 1;
+						}
+					}
+					else if(temp2[charNum] == '('){
+						// then increment the OpenBracketCount
+						OpenBracketCount = OpenBracketCount + 1;
+					}
+				}
+
+				// split the left hand side and then add it 
+				String temp3 = temp2.Substring (0, SplitIndex);
+				String temp4 = temp2.Substring (SplitIndex+1,temp2.Length-SplitIndex-1);
+
+				// append the temp3 to the temp1 string
+				temp1 = temp1 + temp3;
+
+
+				HornClauseClass tempHorn1 = Sentence2Clause(temp1);
+				HornClauseClass tempHorn2 = Sentence2Clause(temp4);
 				return new HornClauseBidirectionalClass(tempHorn1, tempHorn2);
 			}
-            else if (sentence.Contains("<=>"))
+            else*/ if (sentence.Contains("<=>"))
             {
                 String[] separator = { "<=>" };
                 String[] temp = sentence.Split(separator, System.StringSplitOptions.RemoveEmptyEntries);

@@ -1,5 +1,10 @@
 TELL
-a&(B)&c
+a&b; a; b;
+ASK
+a
+
+TELL
+a&(b\/c); a; b;
 ASK
 a
 
