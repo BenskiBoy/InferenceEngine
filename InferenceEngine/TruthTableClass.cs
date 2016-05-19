@@ -152,50 +152,35 @@ namespace InferenceEngine
             // Check if query is a subset of the valid worlds of the TT 
             // (the rows where SUM clauses = true)
 
-            Boolean QueryResult = false;
-            int NumberOfTimesTrue = 0;
+            Boolean QueryResult = true;
+			int NumValidWorlds = 0;
             foreach (List<Boolean> Row in Table)
             {
-                if (Row[Symbols.Count + KnowledgeBase.Count + 1] == true)
+                if (Row[Symbols.Count + KnowledgeBase.Count] == true)
                 {
-                    // if the query entry is true, check if the SUM clauses entry it true
-                    if (Row[Symbols.Count + KnowledgeBase.Count] == true)
+                    // if the SUM clauses entry is true, check if the Query entry is true
+                    if (Row[Symbols.Count + KnowledgeBase.Count + 1] == true)
                     {
                         // if it's untrue, then change the QueryResult to false.
-                        // as the Query is NOT a subset of the valid worlds
-                        NumberOfTimesTrue++;
-                        QueryResult = true;
+                        // as the valid worlds / KB is NOT a subset of the query
+						NumValidWorlds++;
                     }
                     else
                     {
-                        // if it's true, then don't change the temp bool
+                        // if it's false, then don't change the temp bool
+						QueryResult = false;
                     }
                 }
             }
 
-            //return NumberOfTimesTrue;
-            //return "placeholderstring";
             // Format the Result string
-            int NumValidWorlds = 0;
-            if (NumberOfTimesTrue > 0)
+			//this.PrintTT (); // for debugging
+			if (QueryResult)
             {
                 // "When the method is TT and the answer is YES, 
                 // it should be followed by a colon (:) and 
                 // the number of models of KB"
-                // TODO Work out what the hell that means
-                // Ric: maybe this is the number of valid worlds?
-
-                // count the number of valid worlds in the TT
-                foreach (List<Boolean> Row in Table)
-                {
-                    if (Row[this.Symbols.Count + KnowledgeBase.Count] == true)
-                    {
-                        // if the world is valid, increment the counted
-                        NumValidWorlds = NumValidWorlds + 1;
-                    }
-                }
-
-                return "YES: " + NumValidWorlds;
+				return "YES: " + NumValidWorlds;
             }
             else
             {
@@ -203,94 +188,7 @@ namespace InferenceEngine
             }
 
         }
-        public string EvaluateQuery(QueryClass Query,char d)
-        {
-            // first fill in the collumn, then check if query is a subset of
-            // the valid worlds of the TT (the rows where SUM clauses = true)
-
-            List<String> ClauseSymbols = new List<String>();
-            List<SymbolValue> SymbolValues = new List<SymbolValue>();
-            SymbolValue TempSymbolValue = new SymbolValue();
-
-
-            ClauseSymbols = Query.QueryClause.GetSymbols();
-            foreach (String clausey in ClauseSymbols)
-            {
-                TempSymbolValue.SymbolName = clausey;
-                TempSymbolValue.Value = false; //Set to false by default
-
-                SymbolValues.Add(TempSymbolValue);
-            }
-            //SymbolValues now contains all symbols but still need to set values
-            foreach (List<Boolean> Row in Table)
-            {
-                for (int ColNum = 0; ColNum < Symbols.Count; ColNum++)
-                {
-                    for (int ClauseSymbolNum = 0; ClauseSymbolNum < SymbolValues.Count; ClauseSymbolNum++)
-                    {
-                        if (Symbols[ColNum] == SymbolValues[ClauseSymbolNum].SymbolName)
-                        {
-                            TempSymbolValue = SymbolValues[ClauseSymbolNum];
-                            TempSymbolValue.Value = Row[ColNum];
-                            SymbolValues[ClauseSymbolNum] = TempSymbolValue;
-                        }
-                    }
-                }
-
-                Row[Symbols.Count + KnowledgeBase.Count + 1] = Query.QueryClause.Evaluate(SymbolValues);
-            }
-
-            // Check if query is a subset of the valid worlds of the TT 
-            // (the rows where SUM clauses = true)
-
-            Boolean QueryResult = false;
-            int NumberOfTimesTrue = 0;
-            foreach (List<Boolean> Row in Table)
-            {
-                if (Row[Symbols.Count + KnowledgeBase.Count + 1] == true)
-                {
-                    // if the query entry is true, check if the SUM clauses entry it true
-                    if (Row[Symbols.Count + KnowledgeBase.Count] == true)
-                    {
-                        // if it's untrue, then change the QueryResult to false.
-                        // as the Query is NOT a subset of the valid worlds
-                        NumberOfTimesTrue++;
-                        QueryResult = true;
-                    }
-                    else
-                    {
-                        // if it's true, then don't change the temp bool
-                    }
-                }
-            }
-
-            // Format the Result string
-            int NumValidWorlds = 0;
-            if (NumberOfTimesTrue > 0)
-            {
-                // "When the method is TT and the answer is YES, 
-                // it should be followed by a colon (:) and 
-                // the number of models of KB"
-                // TODO Work out what the hell that means
-                // Ric: maybe this is the number of valid worlds?
-
-                // count the number of valid worlds in the TT
-                foreach (List<Boolean> Row in Table)
-                {
-                    if (Row[this.Symbols.Count + KnowledgeBase.Count] == true)
-                    {
-                        // if the world is valid, increment the counted
-                        NumValidWorlds = NumValidWorlds + 1;
-                    }
-                }
-
-                return "YES: " + NumValidWorlds;
-            }
-            else
-            {
-                return "NO";
-            }
-        }
+        
         // Method to print the TT 
         public void PrintTT ()
 		{

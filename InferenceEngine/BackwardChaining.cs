@@ -18,7 +18,6 @@ namespace InferenceEngine
 			// initialise our goals list to the symbol(s) contained within the query
             List<string> goals = Query.QueryClause.GetSymbols();
             List<string> searched = new List<string>();
-            List<bool> searchedBools = new List<bool>();
 
 			// starting from the symbol query, iteratively check if each symbol in the goals list
 			// is a conclusion of another KB clause, or is a fact.

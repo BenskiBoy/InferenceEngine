@@ -56,7 +56,6 @@ namespace InferenceEngine
         }
         private HornClauseClass Sentence2Clause(String sentence)
         {
-            List<HornClauseFactClass> facts = new List<HornClauseFactClass>();
             if (Regex.IsMatch(sentence, "=>"))
             {
                 String[] separator = { "=>" };
