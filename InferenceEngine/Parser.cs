@@ -54,6 +54,10 @@ namespace InferenceEngine
             }
             return Sentence2Clause(fileData[QueryLine]);
         }
+        public void testSentence2Clause(String str)
+        {
+            HornClauseClass H = Sentence2Clause(str);
+        }
         private HornClauseClass Sentence2Clause(String sentence)
         {
 			/*if (sentence.Contains("("))
@@ -116,13 +120,13 @@ namespace InferenceEngine
             }
 			else if (sentence.Contains("\\/")){
 				String[] separator = { "\\/" };
-				String[] temp = sentence.Split(separator, System.StringSplitOptions.RemoveEmptyEntries);
+				String[] temp = sentence.Split(separator,2, System.StringSplitOptions.RemoveEmptyEntries);
 				HornClauseClass tempHorn1 = Sentence2Clause(temp[0]);
 				HornClauseClass tempHorn2 = Sentence2Clause(temp[1]);
 				return new HornClauseOrClass(tempHorn1, tempHorn2);
 			}
 			else if (sentence.Contains("&")){
-                String[] temp = sentence.Split('&');
+                String[] temp = sentence.Split(new char[] { '&' }, 2);
                 HornClauseClass tempHorn1 = Sentence2Clause(temp[0]);
                 HornClauseClass tempHorn2 = Sentence2Clause(temp[1]);
                 return new HornClauseAndClass(tempHorn1, tempHorn2);

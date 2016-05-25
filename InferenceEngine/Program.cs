@@ -15,6 +15,9 @@ namespace InferenceEngine
             Parser P = new Parser();
             InferenceType iEngine;
 
+            //4.20.69
+            P.testSentence2Clause("a\\/b\\/c");
+
             List<HornClauseClass> parsedKB = P.GetKB(fileName);
             QueryClass parsedQuery =  new QueryClass(P.GetQuery(fileName));
 
