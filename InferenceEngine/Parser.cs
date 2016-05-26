@@ -54,10 +54,7 @@ namespace InferenceEngine
             }
             return Sentence2Clause(fileData[QueryLine]);
         }
-        public void testSentence2Clause(String str)
-        {
-            HornClauseClass H = Sentence2Clause(str);
-        }
+
         private HornClauseClass Sentence2Clause(String sentence)
         {
 			/*if (sentence.Contains("("))

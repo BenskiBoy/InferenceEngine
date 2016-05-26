@@ -12,7 +12,7 @@ namespace InferenceEngine
         {
             KnowledgeBase = KB;
         }
-        public override string EvaluateQuery(QueryClass Query)
+		public override string EvaluateQuery(QueryClass Query, Boolean Debug)
         {
             string Result = "YES:";
 			// initialise our goals list to the symbol(s) contained within the query

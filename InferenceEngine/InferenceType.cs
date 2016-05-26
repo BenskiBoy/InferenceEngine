@@ -10,7 +10,7 @@ namespace InferenceEngine
     {
         public List<HornClauseClass> KnowledgeBase;
         public List<String> Symbols; // List of symbols contained within the KB
-        abstract public String EvaluateQuery(QueryClass Query);//?????????
+		abstract public String EvaluateQuery(QueryClass Query, Boolean Debug);//?????????
         // Function to check whether the KB entails the Query
         // Returns a string response: YES or NO.
         // If the answer is YES, it is follwed by a colon (:) 

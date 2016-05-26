@@ -111,8 +111,8 @@ namespace InferenceEngine
         }
 
         // Method to evaluate the querey collumn of the TT 
-        // return value shows number of times query enatils KB...(TODO: Write wording?) 
-        override public string EvaluateQuery(QueryClass Query)
+        // return value shows number of times query enatils KB...
+		override public string EvaluateQuery(QueryClass Query, Boolean Debug)
         {
             // first fill in the collumn, then check if query is a subset of
             // the valid worlds of the TT (the rows where SUM clauses = true)
@@ -174,7 +174,7 @@ namespace InferenceEngine
             }
 
             // Format the Result string
-			this.PrintTT (); // for debugging
+			if(Debug) {this.PrintTT ();} // for debugging
 			if (QueryResult)
             {
                 // "When the method is TT and the answer is YES, 

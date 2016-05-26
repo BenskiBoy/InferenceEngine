@@ -18,6 +18,7 @@ Features/Bugs/Missing:
 	 + BC Methods
 	 + Research Component: General Inference Engine for TT Method. Added operators: OR (\/), Not (~) and Bidirectional (<=>).
 	 + 3 Input operators work (i.e. A & B & C)
+	 + The user can run the program with an optional 3rd argument. When this 3rd argument is DEBUG, and inferent method is TT, the truth table will be printed to console.
 
 	 Known Bugs
 	 - FC and BC methods don't work with extended operators (OR, NOT, Bidirectional Implication)

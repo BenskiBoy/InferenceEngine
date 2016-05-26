@@ -1,7 +1,7 @@
 TELL
-a&(b\/c); a; b;
+p2=> p3; p3 => p1; c => e; b&e => f; f&g => h; p1=>d; p1&p3 => c; a; b; p2;
 ASK
-a
+d
 
 TELL
 a<=>b; b;
@@ -22,11 +22,6 @@ TELL
 a&(b\/c); a; b;
 ASK
 a
-
-TELL
-p2=> p3; p3 => p1; c => e; b&e => f; f&g => h; p1=>d; p1&p3 => c; a; b; p2;
-ASK
-d
 
 TELL
 a&b=>c; a;

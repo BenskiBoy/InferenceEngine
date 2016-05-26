@@ -13,7 +13,7 @@ namespace InferenceEngine
         {
             KnowledgeBase = KB;
         }
-        override public string EvaluateQuery(QueryClass Query)
+		override public string EvaluateQuery(QueryClass Query, Boolean Debug)
         {
            
 
@@ -28,8 +28,6 @@ namespace InferenceEngine
             int TempInt = 0;
             for (int ClauseNum = 0; ClauseNum < this.KnowledgeBase.Count; ClauseNum++)
             {
-                // TODO make the symbols hornclause classes so we can 
-                // see how many premise symbols they have
                 TempInt = this.KnowledgeBase[ClauseNum].GetPremiseSymbols().Count;
                 NumPremisesRemaining.Add(TempInt);
             }
