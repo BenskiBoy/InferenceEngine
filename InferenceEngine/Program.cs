@@ -9,8 +9,10 @@ namespace InferenceEngine
 		{
             // args[0] method
             // args[1] filename
-            String inference = "TT";
-            String fileName = "test1.txt";
+			String inference = args[0];
+			String fileName = args [1];
+
+			// debugging stuff for 3rd argument, error checking in input?
 
             Parser P = new Parser();
             InferenceType iEngine;

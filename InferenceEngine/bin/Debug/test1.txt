@@ -1,7 +1,22 @@
 TELL
-a&b; a; b;
+a&(b\/c); a; b;
 ASK
 a
+
+TELL
+a<=>b; b;
+ASK
+a
+
+TELL
+~a=>b; ~a;
+ASK
+b
+
+TELL
+a\/b\/c=>d; a; b; c;
+ASK
+d
 
 TELL
 a&(b\/c); a; b;

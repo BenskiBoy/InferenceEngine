@@ -17,9 +17,11 @@ Features/Bugs/Missing:
 	 + FC Methods
 	 + BC Methods
 	 + Research Component: General Inference Engine for TT Method. Added operators: OR (\/), Not (~) and Bidirectional (<=>).
+	 + 3 Input operators work (i.e. A & B & C)
 
 	 Known Bugs
-	 + 3 Input operators (i.e. A & B & C) cause the parser to only register the first two inputs <TODO>
+	 - FC and BC methods don't work with extended operators (OR, NOT, Bidirectional Implication)
+	 - Parser method fails when parenthesis (optional research component) are present in TELL clauses. Program throws an exception.
 
 	 Missing
 	 - None 
@@ -27,7 +29,55 @@ Features/Bugs/Missing:
 
 Test cases: 
  // The test cases you have developed ton test your program. What bugs have you found?
- <TODO>
+
+	TELL
+	a&b=>c; a;
+	ASK
+	c
+
+	Result: works for TT, FC, BC
+
+	TELL
+	p2=> p3; p3 => p1; c => e; b&e => f; f&g => h; p1=>d; p1&p3 => c; a; b; p2;
+	ASK
+	d
+
+	Result: works for TT, FC, BC
+
+	TELL
+	a\/b\/c=>d; a; b; c;
+	ASK
+	d
+
+	Result: works for TT only
+
+	TELL
+	a&b&c=>d; a; b; c;
+	ASK
+	d
+
+	Result: works for TT only
+
+	TELL
+	~a=>b; ~a;
+	ASK
+	b
+
+	Result: works for TT only
+
+	TELL
+	a<=>b; b;
+	ASK
+	a
+
+	Result: works for TT only
+
+	TELL
+	a&(b\/c); a; b;
+	ASK
+	a
+
+	Result: Parser method fails due to presence of parenthesis. Program throws an exception.
 
 Acknowledgements/Resources: 
  // Include in your readme.txt file a list of the resources you have used 
