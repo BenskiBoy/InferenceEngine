@@ -23,6 +23,8 @@ Features/Bugs/Missing:
 	 Known Bugs
 	 - FC and BC methods don't work with extended operators (OR, NOT, Bidirectional Implication)
 	 - Parser method fails when parenthesis (optional research component) are present in TELL clauses. Program throws an exception.
+	 - Parser method fails when text file name is invalid.
+	 - Query method fails when inference method is invalid.
 
 	 Missing
 	 - None 
